@@ -45,9 +45,7 @@
                 current.update();
                 gs.addInfoMessage( "Jira Issue created successfully: " + responseObj.key  );
             } else {
-                current.u_is_jira_successfull = false;
-                gs.error(
-                    "Jira issue creation failed. Status: " +   statusCode + " Response: " + responseBody );
+                gs.error( "Jira issue creation failed. Status: " +   statusCode + " Response: " + responseBody );
             }
 
         } catch (ex) {
