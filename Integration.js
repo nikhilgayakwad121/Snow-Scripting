@@ -1,3 +1,4 @@
+//------------------------------------------------------------------------------------------------------------------------------//
 ```call from async business Rule```
     
 (function executeRule(current, previous /* null when async */) {
@@ -60,7 +61,7 @@
 })(current, previous);
 
 
-
+//------------------------------------------------------------------------------------------------------------------------------//
 '''  Scripted rest API  '''
 (function process( request reponse) {
 
@@ -80,6 +81,7 @@ if(grincident.next()){
 })(request, response)
 
 
+//------------------------------------------------------------------------------------------------------------------------------//
 //Script include to make OAuth 2.0 dynamic
 var DynamicTokenUtils = Class.create();
 DynamicTokenUtils.prototype = {
@@ -116,7 +118,7 @@ DynamicTokenUtils.prototype = {
     type: 'DynamicTokenUtils'
 };
 
-
+//------------------------------------------------------------------------------------------------------------------------------//
 // Call that Script include from Async bussiness rule
 var tokenUtil = new DynamicTokenUtils();
 var dynamicToken = tokenUtil.getDynamicToken();
