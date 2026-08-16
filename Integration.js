@@ -77,5 +77,59 @@ if(grincident.next()){
     
 }
     
-})(request, response);
+})(request, response)
 
+
+//Script include to make OAuth 2.0 dynamic
+var DynamicTokenUtils = Class.create();
+DynamicTokenUtils.prototype = {
+    initialize: function() {
+    },
+
+    getDynamicToken: function() {
+        try {
+            // Instantiate the OAuth client
+            var client = new sn_auth.GlideOAuthClient();
+            
+            // "My_OAuth_Registry_Name" matches the 'Name' of your Application Registry record
+            // "password" or "client_credentials" matches your provider's grant type
+            var tokenRequest = new sn_auth.GlideOAuthClientRequest();
+            tokenRequest.setGrantType("client_credentials"); 
+            
+            // Request the token dynamically
+            var tokenResponse = client.requestTokenByRequest("My_OAuth_Registry_Name", tokenRequest);
+            
+            if (tokenResponse) {
+                var token = tokenResponse.getToken();
+                var accessToken = token.getAccessToken();
+                var expiresIn = token.getExpiresIn();
+                
+                gs.info("Successfully fetched dynamic token. Expires in: " + expiresIn + " seconds.");
+                return accessToken;
+            }
+        } catch (ex) {
+            gs.error("Error generating dynamic OAuth token: " + ex.getMessage());
+        }
+        return null;
+    },
+
+    type: 'DynamicTokenUtils'
+};
+
+
+// Call that Script include from Async bussiness rule
+var tokenUtil = new DynamicTokenUtils();
+var dynamicToken = tokenUtil.getDynamicToken();
+
+if (dynamicToken) {
+    var request = new sn_wrapper.RESTMessageV2();
+    request.setEndpoint("https://external-service.com");
+    request.setMethod("GET");
+    
+    // Dynamically inject the bearer token into the Authorization Header
+    request.setRequestHeader("Authorization", "Bearer " + dynamicToken);
+    
+    var response = request.execute();
+    var responseBody = response.getBody();
+    gs.info(responseBody);
+}
