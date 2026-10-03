@@ -1,4 +1,4 @@
------------Count catalog items not used in last 12 months------------
+-----------Count catalog items not been used in last 12 months------------
 var unusedCount = 0;
 var catItem = new GlideRecord('sc_cat_item');
 catItem.query();
